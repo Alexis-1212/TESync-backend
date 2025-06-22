@@ -1,13 +1,12 @@
-/*const express = require('express');
+const express = require('express');
 const router = express.Router();
-const materiaController = require('../controllers/materiaController');
+const crud = require('../controlador/materia/materiaCrud');
 
-// api/materias
-router.post('/', materiaController.crearMateria);
-router.get('/', materiaController.obtenerMaterias);
-router.get('/:id', materiaController.obtenerMateria);
-router.put('/:id', materiaController.actualizarMateria);
-router.delete('/:id', materiaController.eliminarMateria);
+// 📦 CRUD básico para Materia
+router.post('/crear-materia', crud.crearMateria);
+router.get('/obtener-materias', crud.obtenerMaterias);
+router.get('/obtener-materia/:id', crud.obtenerMateria);
+router.put('/actualizar-materia/:id', crud.actualizarMateria);
+router.delete('/eliminar-materia/:id', crud.eliminarMateria);
 
 module.exports = router;
-*/

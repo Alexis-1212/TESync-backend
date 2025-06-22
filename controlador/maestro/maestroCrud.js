@@ -1,4 +1,4 @@
-const Maestro = require('../modelos/maestro');
+const Maestro = require('../../modelos/maestro');
 
 // Crear maestro
 exports.crearMaestro = async (req, res) => {

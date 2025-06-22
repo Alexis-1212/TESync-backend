@@ -1,4 +1,6 @@
-// crearAlumno: POST /api/alumnos
+const Alumno = require('../modelos/alumno');
+
+// POST /api/alumnos
 exports.crearAlumno = async (req, res) => {
   try {
     const nuevoAlumno = new Alumno(req.body);
@@ -9,7 +11,7 @@ exports.crearAlumno = async (req, res) => {
   }
 };
 
-// obtenerAlumnos: GET /api/alumnos
+// GET /api/alumnos
 exports.obtenerAlumnos = async (req, res) => {
   try {
     const alumnos = await Alumno.find().populate('calificaciones.materia');
@@ -19,7 +21,7 @@ exports.obtenerAlumnos = async (req, res) => {
   }
 };
 
-// obtenerAlumno: GET /api/alumnos/:id
+// GET /api/alumnos/:id
 exports.obtenerAlumno = async (req, res) => {
   try {
     const alumno = await Alumno.findById(req.params.id).populate('calificaciones.materia');
@@ -30,20 +32,22 @@ exports.obtenerAlumno = async (req, res) => {
   }
 };
 
-// actualizarAlumno: PUT /api/alumnos/:id
+// PUT /api/alumnos/:id
 exports.actualizarAlumno = async (req, res) => {
   try {
     const actualizado = await Alumno.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!actualizado) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json(actualizado);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-// eliminarAlumno: DELETE /api/alumnos/:id
+// DELETE /api/alumnos/:id
 exports.eliminarAlumno = async (req, res) => {
   try {
-    await Alumno.findByIdAndDelete(req.params.id);
+    const eliminado = await Alumno.findByIdAndDelete(req.params.id);
+    if (!eliminado) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json({ mensaje: 'Alumno eliminado correctamente' });
   } catch (err) {
     res.status(500).json({ error: err.message });

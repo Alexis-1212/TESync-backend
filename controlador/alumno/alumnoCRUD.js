@@ -1,6 +1,8 @@
-const Alumno = require('../modelos/alumno');
+console.log('📦 Cargando modelo Alumno...');
+const Alumno = require('../../modelos/alumno');
+console.log('✅ Modelo Alumno cargado:', typeof Alumno);
 
-// POST /api/alumnos
+
 exports.crearAlumno = async (req, res) => {
   try {
     const nuevoAlumno = new Alumno(req.body);
@@ -11,7 +13,6 @@ exports.crearAlumno = async (req, res) => {
   }
 };
 
-// GET /api/alumnos
 exports.obtenerAlumnos = async (req, res) => {
   try {
     const alumnos = await Alumno.find().populate('calificaciones.materia');
@@ -21,7 +22,7 @@ exports.obtenerAlumnos = async (req, res) => {
   }
 };
 
-// GET /api/alumnos/:id
+
 exports.obtenerAlumno = async (req, res) => {
   try {
     const alumno = await Alumno.findById(req.params.id).populate('calificaciones.materia');
@@ -32,7 +33,7 @@ exports.obtenerAlumno = async (req, res) => {
   }
 };
 
-// PUT /api/alumnos/:id
+
 exports.actualizarAlumno = async (req, res) => {
   try {
     const actualizado = await Alumno.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -43,7 +44,7 @@ exports.actualizarAlumno = async (req, res) => {
   }
 };
 
-// DELETE /api/alumnos/:id
+
 exports.eliminarAlumno = async (req, res) => {
   try {
     const eliminado = await Alumno.findByIdAndDelete(req.params.id);
@@ -51,5 +52,26 @@ exports.eliminarAlumno = async (req, res) => {
     res.json({ mensaje: 'Alumno eliminado correctamente' });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+exports.actualizarGrupoAlumno = async (req, res) => {
+  try {
+    const { grupo } = req.body;
+
+    if (!grupo) return res.status(400).json({ error: 'El grupo es requerido' });
+
+    const actualizado = await Alumno.findByIdAndUpdate(
+      req.params.id,
+      { grupo },
+      { new: true }
+    );
+
+    if (!actualizado) return res.status(404).json({ error: 'Alumno no encontrado' });
+
+    res.json({ mensaje: 'Grupo actualizado correctamente', alumno: actualizado });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 };

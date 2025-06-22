@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 const materiaController = require('../controllers/materiaController');
 
@@ -10,3 +10,4 @@ router.put('/:id', materiaController.actualizarMateria);
 router.delete('/:id', materiaController.eliminarMateria);
 
 module.exports = router;
+*/

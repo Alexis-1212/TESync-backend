@@ -12,8 +12,8 @@ app.use(express.json());
 
 // Rutas (las puedes ir creando)
 app.use('/api/alumnos', require('./rutas/alumnoRuta'));
-app.use('/api/maestros', require('./rutas/maestroRuta'));
-app.use('/api/materias', require('./rutas/materiaRuta'));
+//app.use('/api/maestros', require('./rutas/maestroRuta'));
+//app.use('/api/materias', require('./rutas/materiaRuta'));
 
 // Puerto
 const PUERTO = process.env.PUERTO || 3000;

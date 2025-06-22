@@ -1,7 +1,7 @@
-const Maestro = require('../modelos/Maestro');
+const Maestro = require('../modelos/maestro');
 
-// Crear profesor
-exports.crearProfesor = async (req, res) => {
+// Crear maestro
+exports.crearMaestro = async (req, res) => {
   try {
     const nuevo = new Maestro(req.body);
     const guardado = await nuevo.save();
@@ -11,29 +11,29 @@ exports.crearProfesor = async (req, res) => {
   }
 };
 
-// Obtener todos los profesores
-exports.obtenerProfesores = async (req, res) => {
+// Obtener todos los maestros
+exports.obtenerMaestros = async (req, res) => {
   try {
-    const profesores = await Maestro.find().populate('materias');
-    res.json(profesores);
+    const maestros = await Maestro.find().populate('materias');
+    res.json(maestros);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtener un profesor por ID
-exports.obtenerProfesor = async (req, res) => {
+// Obtener un maestro por ID
+exports.obtenerMaestro = async (req, res) => {
   try {
-    const profesor = await Maestro.findById(req.params.id).populate('materias');
-    if (!profesor) return res.status(404).json({ error: 'Profesor no encontrado' });
-    res.json(profesor);
+    const maestro = await Maestro.findById(req.params.id).populate('materias');
+    if (!maestro) return res.status(404).json({ error: 'Maestro no encontrado' });
+    res.json(maestro);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Actualizar profesor
-exports.actualizarProfesor = async (req, res) => {
+// Actualizar maestro
+exports.actualizarMaestro = async (req, res) => {
   try {
     const actualizado = await Maestro.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(actualizado);
@@ -42,11 +42,11 @@ exports.actualizarProfesor = async (req, res) => {
   }
 };
 
-// Eliminar profesor
-exports.eliminarProfesor = async (req, res) => {
+// Eliminar maestro
+exports.eliminarMaestro = async (req, res) => {
   try {
     await Maestro.findByIdAndDelete(req.params.id);
-    res.json({ mensaje: 'Profesor eliminado correctamente' });
+    res.json({ mensaje: 'Maestro eliminado correctamente' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

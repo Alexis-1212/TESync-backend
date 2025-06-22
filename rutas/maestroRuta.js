@@ -1,13 +1,14 @@
-/*const express = require('express');
+const express = require('express');
 const router = express.Router();
-const maestroController = require('../controllers/maestroController');
+const maestro = require('../controllers/maestroController');
 
-// api/maestros
-router.post('/', maestroController.crearMaestro);
-router.get('/', maestroController.obtenerMaestros);
-router.get('/:id', maestroController.obtenerMaestro);
-router.put('/:id', maestroController.actualizarMaestro);
-router.delete('/:id', maestroController.eliminarMaestro);
+// 📦 CRUD básico de maestros
+router.post('/crear-maestro', maestro.crearMaestro);
+router.get('/obtener-maestros', maestro.obtenerMaestros);
+router.get('/obtener-maestro:id', maestro.obtenerMaestro);
+router.put('/actualizar-maestro:id', maestro.actualizarMaestro);
+router.delete('/eliminar-maestro:id', maestro.eliminarMaestro);
+
+// Si deseas agregar más funciones (como materias, autenticación, etc.), aquí puedes expandir.
 
 module.exports = router;
-*/

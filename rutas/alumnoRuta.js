@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const alumnoController = require('../controllers/alumnoController');
 
-// GET /api/alumnos - lista alumnos
-router.get('/', (req, res) => {
-  res.send('Lista de alumnos');
-});
-
-// POST /api/alumnos - crear alumno
-router.post('/', (req, res) => {
-  const nuevoAlumno = req.body; // aquí iría lógica para guardar en DB
-  res.status(201).json({ mensaje: 'Alumno creado', alumno: nuevoAlumno });
-});
+// api/alumnos
+router.post('/', alumnoController.crearAlumno);
+router.get('/', alumnoController.obtenerAlumnos);
+router.get('/:id', alumnoController.obtenerAlumno);
+router.put('/:id', alumnoController.actualizarAlumno);
+router.delete('/:id', alumnoController.eliminarAlumno);
 
 module.exports = router;
+

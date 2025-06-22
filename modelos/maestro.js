@@ -8,4 +8,4 @@ const MaestroSchema = new Schema({
   materias: [{ type: Schema.Types.ObjectId, ref: 'Materia' }] // Materias que imparte
 });
 
-module.exports = mongoose.model('Maestro', ProfesorSchema);
+module.exports = mongoose.model('Maestro', MaestroSchema);

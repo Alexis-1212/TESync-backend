@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const materiaController = require('../controllers/materiaController');
 
-// GET /api/materias - lista materias
-router.get('/', (req, res) => {
-  res.send('Lista de materias');
-});
-
-// POST /api/materias - crear materia
-router.post('/', (req, res) => {
-  const nuevaMateria = req.body; // aquí lógica para guardar en DB
-  res.status(201).json({ mensaje: 'Materia creada', materia: nuevaMateria });
-});
+// api/materias
+router.post('/', materiaController.crearMateria);
+router.get('/', materiaController.obtenerMaterias);
+router.get('/:id', materiaController.obtenerMateria);
+router.put('/:id', materiaController.actualizarMateria);
+router.delete('/:id', materiaController.eliminarMateria);
 
 module.exports = router;

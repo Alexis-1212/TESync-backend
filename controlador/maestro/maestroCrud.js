@@ -14,7 +14,7 @@ exports.crearMaestro = async (req, res) => {
 // Obtener todos los maestros
 exports.obtenerMaestros = async (req, res) => {
   try {
-    const maestros = await Maestro.find(); // Se quitó populate('materias')
+    const maestros = await Maestro.find().populate('materias');
     res.json(maestros);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -24,7 +24,7 @@ exports.obtenerMaestros = async (req, res) => {
 // Obtener un maestro por ID
 exports.obtenerMaestro = async (req, res) => {
   try {
-    const maestro = await Maestro.findById(req.params.id); // Se quitó populate('materias')
+    const maestro = await Maestro.findById(req.params.id).populate('materias');
     if (!maestro) return res.status(404).json({ error: 'Maestro no encontrado' });
     res.json(maestro);
   } catch (err) {

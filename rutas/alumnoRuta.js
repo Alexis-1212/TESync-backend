@@ -16,8 +16,8 @@ router.patch('/actualizar-grupo-alumno:id', crud.actualizarGrupoAlumno);
 // 📚 Materias
 router.post('/:id/materias', materias.agregarMateria);
 router.get('/:id/materias', materias.obtenerMateriasAlumno);
-
+*/
 // 🔐 Autenticación
 router.post('/login', auth.autenticarAlumno);
-*/
+
 module.exports = router;

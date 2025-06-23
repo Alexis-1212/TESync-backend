@@ -6,6 +6,7 @@ const auth = require('../controlador/alumno/autenticarAlumno');
 const calificaciones = require('../controlador/alumno/alumnoCalificaciones');
 
 
+
 // 📦 CRUD básico
 router.post('/crear-alumno', crud.crearAlumno);
 router.get('/obtener-alumnos', crud.obtenerAlumnos);
@@ -27,5 +28,21 @@ router.get('/:matricula/calificaciones/:clave', calificaciones.obtenerCalificaci
 
 // 🔐 Autenticación
 router.post('/login', auth.autenticarAlumno);
+
+// Asignar/eliminar materia a un alumno
+router.post('/:matricula/materia/:claveMateria', materias.agregarMateriaAlumno);
+router.delete('/:matricula/materia/:claveMateria', materias.eliminarMateriaAlumno);
+
+// Asignar materia a todos los del grupo
+router.post('/grupo/:grupo/materia/:claveMateria', materias.asignarMateriaAGrupo);
+
+// Ver materias del alumno
+router.get('/:matricula/materias', materias.verMateriasDeAlumno);
+
+// Ver alumnos por grupo
+router.get('/grupo/:grupo/alumnos', materias.verAlumnosPorGrupo);
+
+// Ver alumnos inscritos en una materia
+router.get('/materia/:claveMateria/alumnos', materias.verAlumnosPorMateria);
 
 module.exports = router;

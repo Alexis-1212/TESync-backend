@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const MateriaSchema = new Schema({
   nombre: { type: String, required: true },
   clave: { type: String, required: true, unique: true },
-  creditos: { type: Number },
+  creditos: { type: Number, required: true },
   unidades: { type: Number, required: true }
 });
 
-module.exports = mongoose.model('Materia', MateriaSchema);
+module.exports = mongoose.model('Materia', MateriaSchema);

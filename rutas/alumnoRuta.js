@@ -7,10 +7,12 @@ const auth = require('../controlador/alumno/autenticarAlumno');
 // 📦 CRUD básico
 router.post('/crear-alumno', crud.crearAlumno);
 router.get('/obtener-alumnos', crud.obtenerAlumnos);
-router.get('/obtener-alumno:id', crud.obtenerAlumno);
-router.put('/actualizar-alumno:id', crud.actualizarAlumno);
-router.delete('/eliminar-alumno:id', crud.eliminarAlumno);
-router.patch('/actualizar-grupo-alumno:id', crud.actualizarGrupoAlumno);
+// Rutas actualizadas para usar matrícula
+router.get('/obtener-alumno/:matricula', crud.obtenerAlumno);
+router.put('/actualizar-alumno/:matricula', crud.actualizarAlumno);
+router.delete('/eliminar-alumno/:matricula', crud.eliminarAlumno);
+router.patch('/actualizar-grupo-alumno/:matricula', crud.actualizarGrupoAlumno);
+
 
 /*
 // 📚 Materias

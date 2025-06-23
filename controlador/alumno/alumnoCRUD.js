@@ -1,8 +1,6 @@
-console.log('📦 Cargando modelo Alumno...');
 const Alumno = require('../../modelos/alumno');
-console.log('✅ Modelo Alumno cargado:', typeof Alumno);
 
-
+// Crear alumno
 exports.crearAlumno = async (req, res) => {
   try {
     const nuevoAlumno = new Alumno(req.body);
@@ -13,6 +11,7 @@ exports.crearAlumno = async (req, res) => {
   }
 };
 
+// Obtener todos los alumnos
 exports.obtenerAlumnos = async (req, res) => {
   try {
     const alumnos = await Alumno.find().populate('calificaciones.materia');
@@ -22,10 +21,10 @@ exports.obtenerAlumnos = async (req, res) => {
   }
 };
 
-
+// Obtener alumno por matrícula
 exports.obtenerAlumno = async (req, res) => {
   try {
-    const alumno = await Alumno.findById(req.params.id).populate('calificaciones.materia');
+    const alumno = await Alumno.findOne({ matricula: req.params.matricula }).populate('calificaciones.materia');
     if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json(alumno);
   } catch (err) {
@@ -33,10 +32,14 @@ exports.obtenerAlumno = async (req, res) => {
   }
 };
 
-
+// Actualizar alumno por matrícula
 exports.actualizarAlumno = async (req, res) => {
   try {
-    const actualizado = await Alumno.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const actualizado = await Alumno.findOneAndUpdate(
+      { matricula: req.params.matricula },
+      req.body,
+      { new: true }
+    );
     if (!actualizado) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json(actualizado);
   } catch (err) {
@@ -44,10 +47,10 @@ exports.actualizarAlumno = async (req, res) => {
   }
 };
 
-
+// Eliminar alumno por matrícula
 exports.eliminarAlumno = async (req, res) => {
   try {
-    const eliminado = await Alumno.findByIdAndDelete(req.params.id);
+    const eliminado = await Alumno.findOneAndDelete({ matricula: req.params.matricula });
     if (!eliminado) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json({ mensaje: 'Alumno eliminado correctamente' });
   } catch (err) {
@@ -55,15 +58,14 @@ exports.eliminarAlumno = async (req, res) => {
   }
 };
 
-
+// Actualizar grupo por matrícula
 exports.actualizarGrupoAlumno = async (req, res) => {
   try {
     const { grupo } = req.body;
-
     if (!grupo) return res.status(400).json({ error: 'El grupo es requerido' });
 
-    const actualizado = await Alumno.findByIdAndUpdate(
-      req.params.id,
+    const actualizado = await Alumno.findOneAndUpdate(
+      { matricula: req.params.matricula },
       { grupo },
       { new: true }
     );

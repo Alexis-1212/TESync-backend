@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const Maestro = require('../../modelos/maestro');
 
 exports.autenticarMaestro = async (req, res) => {
+  console.log('req.body:', req.body); //
   const { cedula, password } = req.body;
 
   try {

@@ -6,10 +6,14 @@ exports.autenticarAlumno = async (req, res) => {
 
   try {
     const alumno = await Alumno.findOne({ matricula });
-    if (!alumno) return res.status(401).json({ error: 'Matrícula o contraseña incorrecta' });
+    if (!alumno) {
+      return res.status(401).json({ error: 'Matrícula o contraseña incorrecta' });
+    }
 
     const coincide = await bcrypt.compare(contraseña, alumno.contraseña);
-    if (!coincide) return res.status(401).json({ error: 'Matrícula o contraseña incorrecta' });
+    if (!coincide) {
+      return res.status(401).json({ error: 'Matrícula o contraseña incorrecta' });
+    }
 
     res.json({ mensaje: 'Inicio de sesión exitoso', alumno });
   } catch (err) {

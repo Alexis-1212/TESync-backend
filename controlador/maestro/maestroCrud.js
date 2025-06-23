@@ -14,17 +14,18 @@ exports.crearMaestro = async (req, res) => {
 // Obtener todos los maestros
 exports.obtenerMaestros = async (req, res) => {
   try {
-    const maestros = await Maestro.find().populate('materias');
+    const maestros = await Maestro.find(); // Quitar populate si no usas materias
     res.json(maestros);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtener un maestro por ID
+// Obtener un maestro por matrícula
 exports.obtenerMaestro = async (req, res) => {
   try {
-    const maestro = await Maestro.findById(req.params.id).populate('materias');
+    const { matricula } = req.params;
+    const maestro = await Maestro.findOne({ matricula });
     if (!maestro) return res.status(404).json({ error: 'Maestro no encontrado' });
     res.json(maestro);
   } catch (err) {
@@ -32,23 +33,28 @@ exports.obtenerMaestro = async (req, res) => {
   }
 };
 
-// Actualizar maestro
+// Actualizar maestro por matrícula
 exports.actualizarMaestro = async (req, res) => {
   try {
-    const actualizado = await Maestro.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { matricula } = req.params;
+    const actualizado = await Maestro.findOneAndUpdate({ matricula }, req.body, { new: true });
+    if (!actualizado) return res.status(404).json({ error: 'Maestro no encontrado para actualizar' });
     res.json(actualizado);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
 
-// Eliminar maestro
+// Eliminar maestro por matrícula
 exports.eliminarMaestro = async (req, res) => {
   try {
-    await Maestro.findByIdAndDelete(req.params.id);
+    const { matricula } = req.params;
+    const eliminado = await Maestro.findOneAndDelete({ matricula });
+    if (!eliminado) return res.status(404).json({ error: 'Maestro no encontrado para eliminar' });
     res.json({ mensaje: 'Maestro eliminado correctamente' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 

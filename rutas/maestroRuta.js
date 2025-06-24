@@ -9,18 +9,21 @@ const calificaciones = require('../controlador/maestro/maestroCalificaciones');
 // 🔎 Obtener calificaciones de una unidad y final por materia y grupo (solo las del maestro)
 router.get('/calificaciones/:cedula/:claveMateria/:grupo/:unidad',calificaciones.obtenerCalificacionesPorUnidadYGrupo);
 
+// 👀 Ver todas las relaciones maestro-materia-grupo
+router.get('/relaciones', materias.verRelaciones);
+
 
 // 📚 Obtener materias que tiene un maestro
 router.get('/materias/:cedula', materias.verMateriasDeMaestro);
 
 // ➕ Asignar materia a maestro (params: cedula, clave)
-router.post('/materias/:cedula/:clave', materias.asignarMateria);
+//router.post('/materias/:cedula/:clave', materias.asignarMateria);
 
 // 📝 Editar materia asignada (params: cedula, claveAnterior; body: claveNueva)
-router.put('/materias/:cedula/:claveAnterior', materias.editarMateriaAsignada);
+//router.put('/materias/:cedula/:clave', materias.editarMateriaAsignada);
 
 // ❌ Eliminar materia asignada (params: cedula, clave)
-router.delete('/materias/:cedula/:clave', materias.eliminarMateria);
+//router.delete('/materias/:cedula/:clave', materias.eliminarMateria);
 
 // CRUD básico de maestros
 router.post('/crear-maestro', crud.crearMaestro);

@@ -13,11 +13,23 @@ exports.agregarMateriaAlumno = async (req, res) => {
       return res.status(404).json({ error: 'Alumno o materia no encontrado' });
     }
 
-    if (alumno.materias.includes(materia._id)) {
+    // Asegurar que calificaciones esté definido
+    if (!alumno.calificaciones) alumno.calificaciones = [];
+
+    const yaTiene = alumno.calificaciones.some(
+      c => c.materia.toString() === materia._id.toString()
+    );
+
+    if (yaTiene) {
       return res.status(400).json({ error: 'La materia ya está asignada al alumno' });
     }
 
-    alumno.materias.push(materia._id);
+    alumno.calificaciones.push({
+      materia: materia._id,
+      unidades: [],
+      final: 0,
+    });
+
     await alumno.save();
 
     res.json({ mensaje: 'Materia asignada con éxito al alumno', alumno });
@@ -25,6 +37,7 @@ exports.agregarMateriaAlumno = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // ✅ 2. Eliminar una materia de un alumno (por matrícula)
 exports.eliminarMateriaAlumno = async (req, res) => {

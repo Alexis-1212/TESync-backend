@@ -43,100 +43,53 @@ exports.verMateriasDeMaestro = async (req, res) => {
   }
 };
 
-// Asignar materia a maestro
-exports.asignarMateria = async (req, res) => {
-  try {
-    const { cedula, clave } = req.params;
-    const maestro = await Maestro.findOne({ cedula });
-    const materia = await Materia.findOne({ clave });
-    if (!maestro || !materia) return res.status(404).json({ error: 'Maestro o materia no encontrada' });
-
-    const yaExiste = await MaestroMateria.findOne({ maestro: maestro._id, materia: materia._id });
-    if (yaExiste) return res.status(400).json({ error: 'Materia ya asignada a este maestro' });
-
-    const nuevaRelacion = new MaestroMateria({ maestro: maestro._id, materia: materia._id });
-    await nuevaRelacion.save();
-
-    res.json({ mensaje: 'Materia asignada correctamente', relacion: nuevaRelacion });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al asignar materia' });
-  }
-};
-
-// Eliminar materia asignada a maestro
-exports.eliminarMateria = async (req, res) => {
-  try {
-    const { cedula, clave } = req.params;
-    const maestro = await Maestro.findOne({ cedula });
-    const materia = await Materia.findOne({ clave });
-    if (!maestro || !materia) return res.status(404).json({ error: 'Maestro o materia no encontrada' });
-
-    const eliminada = await MaestroMateria.findOneAndDelete({ maestro: maestro._id, materia: materia._id });
-    if (!eliminada) return res.status(404).json({ error: 'No se encontró la asignación para eliminar' });
-
-    res.json({ mensaje: 'Materia eliminada correctamente' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar materia' });
-  }
-};
-
-// Editar materia asignada
-exports.editarMateriaAsignada = async (req, res) => {
-  try {
-    const { cedula, claveAnterior } = req.params;
-    const { claveNueva } = req.body;
-
-    const maestro = await Maestro.findOne({ cedula });
-    const materiaAnterior = await Materia.findOne({ clave: claveAnterior });
-    const materiaNueva = await Materia.findOne({ clave: claveNueva });
-
-    if (!maestro || !materiaAnterior || !materiaNueva)
-      return res.status(404).json({ error: 'Datos inválidos' });
-
-    const actualizada = await MaestroMateria.findOneAndUpdate(
-      { maestro: maestro._id, materia: materiaAnterior._id },
-      { materia: materiaNueva._id },
-      { new: true }
-    );
-
-    if (!actualizada) return res.status(404).json({ error: 'No se encontró la relación para actualizar' });
-
-    res.json({ mensaje: 'Materia actualizada correctamente', actualizada });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar materia' });
-  }
-};
-
-// 🔧 Crear relación
+// Crear relación maestro-materia-grupo usando cédula y clave
 exports.crearRelacion = async (req, res) => {
   try {
-    const { maestro, materia, grupo } = req.body;
+    const { cedula, clave, grupo } = req.body;
 
-    // Validar existencia
-    const existeMaestro = await Maestro.findById(maestro);
-    const existeMateria = await Materia.findById(materia);
-    if (!existeMaestro || !existeMateria)
-      return res.status(404).json({ error: 'Maestro o materia no existe' });
+    const maestro = await Maestro.findOne({ cedula });
+    if (!maestro) return res.status(404).json({ error: 'Maestro no encontrado' });
 
-    // Verificar duplicado
-    const duplicado = await MaestroMateria.findOne({ maestro, materia, grupo });
+    const materia = await Materia.findOne({ clave });
+    if (!materia) return res.status(404).json({ error: 'Materia no encontrada' });
+
+    const duplicado = await MaestroMateria.findOne({
+      maestro: maestro._id,
+      materia: materia._id,
+      grupo
+    });
     if (duplicado)
       return res.status(400).json({ error: 'Ya existe esa asignación' });
 
-    const nueva = new MaestroMateria({ maestro, materia, grupo });
-    await nueva.save();
-    res.status(201).json({ mensaje: 'Relación creada correctamente', relacion: nueva });
+    const nuevaRelacion = new MaestroMateria({
+      maestro: maestro._id,
+      materia: materia._id,
+      grupo
+    });
+    await nuevaRelacion.save();
+
+    res.status(201).json({ mensaje: 'Relación creada correctamente', relacion: nuevaRelacion });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-// controlador/maestro/maestroMateria.js
 
+// Eliminar relación maestro-materia-grupo usando cédula y clave
 exports.eliminarRelacion = async (req, res) => {
   try {
-    const { maestro, materia, grupo } = req.body;
+    const { cedula, clave, grupo } = req.body;
 
-    const eliminada = await MaestroMateria.findOneAndDelete({ maestro, materia, grupo });
+    const maestro = await Maestro.findOne({ cedula });
+    const materia = await Materia.findOne({ clave });
+    if (!maestro || !materia)
+      return res.status(404).json({ error: 'Maestro o materia no encontrado' });
+
+    const eliminada = await MaestroMateria.findOneAndDelete({
+      maestro: maestro._id,
+      materia: materia._id,
+      grupo
+    });
     if (!eliminada)
       return res.status(404).json({ error: 'No se encontró esa asignación' });
 
@@ -146,24 +99,60 @@ exports.eliminarRelacion = async (req, res) => {
   }
 };
 
-// controlador/maestro/maestroMateria.js
-
+// Editar relación maestro-materia-grupo usando cédula y claves
 exports.editarRelacion = async (req, res) => {
   try {
-    const { maestro, materia, grupoAnterior, grupoNuevo, materiaNueva } = req.body;
+    const { cedula, claveAnterior, grupoAnterior, grupoNuevo, claveNueva } = req.body;
 
-    const filtro = { maestro, materia, grupo: grupoAnterior };
+    const maestro = await Maestro.findOne({ cedula });
+    if (!maestro) return res.status(404).json({ error: 'Maestro no encontrado' });
+
+    const materiaAnterior = await Materia.findOne({ clave: claveAnterior });
+    if (!materiaAnterior) return res.status(404).json({ error: 'Materia anterior no encontrada' });
+
+    let materiaNueva = null;
+    if (claveNueva) {
+      materiaNueva = await Materia.findOne({ clave: claveNueva });
+      if (!materiaNueva) return res.status(404).json({ error: 'Materia nueva no encontrada' });
+    }
+
+    const filtro = {
+      maestro: maestro._id,
+      materia: materiaAnterior._id,
+      grupo: grupoAnterior
+    };
+
     const actualizacion = {};
-
     if (grupoNuevo) actualizacion.grupo = grupoNuevo;
-    if (materiaNueva) actualizacion.materia = materiaNueva;
+    if (materiaNueva) actualizacion.materia = materiaNueva._id;
 
     const actualizado = await MaestroMateria.findOneAndUpdate(filtro, actualizacion, { new: true });
-    if (!actualizado)
-      return res.status(404).json({ error: 'Relación no encontrada para actualizar' });
+    if (!actualizado) return res.status(404).json({ error: 'Relación no encontrada para actualizar' });
 
     res.json({ mensaje: 'Relación actualizada', actualizada: actualizado });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.verRelaciones = async (req, res) => {
+  try {
+    const relaciones = await MaestroMateria.find()
+      .populate('maestro', 'nombre cedula')
+      .populate('materia', 'nombre clave');
+
+    const resultado = relaciones.map(rel => ({
+      maestro: rel.maestro.nombre,
+      cedula: rel.maestro.cedula,
+      materia: rel.materia.nombre,
+      clave: rel.materia.clave,
+      grupo: rel.grupo
+    }));
+
+    res.json(resultado);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener las relaciones' });
+  }
+};
+
+

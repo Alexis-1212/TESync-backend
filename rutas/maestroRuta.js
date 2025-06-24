@@ -5,6 +5,14 @@ const crud = require('../controlador/maestro/maestroCrud');
 const auth = require('../controlador/maestro/authenticarMaestro');
 const materias = require('../controlador/maestro/maestroMateria');
 
+const calificaciones = require('../controlador/maestro/maestroCalificaciones');
+
+router.get(
+  '/calificaciones/:cedula/:claveMateria/:grupo/:unidad',
+  calificaciones.obtenerCalificacionesPorUnidadYGrupo
+);
+
+
 // 📚 Obtener materias que tiene un maestro
 router.get('/materias/:cedula', materias.verMateriasDeMaestro);
 
@@ -26,5 +34,13 @@ router.delete('/eliminar-maestro/:cedula', crud.eliminarMaestro);
 
 // 🔐 Autenticación de maestros
 router.post('/login', auth.autenticarMaestro);
+
+// rutas/maestroRuta.js
+router.post('/asignar-materia', materias.crearRelacion);
+
+router.delete('/eliminar-materia', materias.eliminarRelacion);
+
+router.put('/editar-relacion', materias.editarRelacion);
+
 
 module.exports = router;

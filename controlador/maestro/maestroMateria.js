@@ -106,3 +106,64 @@ exports.editarMateriaAsignada = async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar materia' });
   }
 };
+
+// 🔧 Crear relación
+exports.crearRelacion = async (req, res) => {
+  try {
+    const { maestro, materia, grupo } = req.body;
+
+    // Validar existencia
+    const existeMaestro = await Maestro.findById(maestro);
+    const existeMateria = await Materia.findById(materia);
+    if (!existeMaestro || !existeMateria)
+      return res.status(404).json({ error: 'Maestro o materia no existe' });
+
+    // Verificar duplicado
+    const duplicado = await MaestroMateria.findOne({ maestro, materia, grupo });
+    if (duplicado)
+      return res.status(400).json({ error: 'Ya existe esa asignación' });
+
+    const nueva = new MaestroMateria({ maestro, materia, grupo });
+    await nueva.save();
+    res.status(201).json({ mensaje: 'Relación creada correctamente', relacion: nueva });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+// controlador/maestro/maestroMateria.js
+
+exports.eliminarRelacion = async (req, res) => {
+  try {
+    const { maestro, materia, grupo } = req.body;
+
+    const eliminada = await MaestroMateria.findOneAndDelete({ maestro, materia, grupo });
+    if (!eliminada)
+      return res.status(404).json({ error: 'No se encontró esa asignación' });
+
+    res.json({ mensaje: 'Relación eliminada correctamente' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// controlador/maestro/maestroMateria.js
+
+exports.editarRelacion = async (req, res) => {
+  try {
+    const { maestro, materia, grupoAnterior, grupoNuevo, materiaNueva } = req.body;
+
+    const filtro = { maestro, materia, grupo: grupoAnterior };
+    const actualizacion = {};
+
+    if (grupoNuevo) actualizacion.grupo = grupoNuevo;
+    if (materiaNueva) actualizacion.materia = materiaNueva;
+
+    const actualizado = await MaestroMateria.findOneAndUpdate(filtro, actualizacion, { new: true });
+    if (!actualizado)
+      return res.status(404).json({ error: 'Relación no encontrada para actualizar' });
+
+    res.json({ mensaje: 'Relación actualizada', actualizada: actualizado });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

@@ -22,15 +22,21 @@ exports.obtenerAlumnos = async (req, res) => {
 };
 
 // Obtener alumno por matrícula
+// En controlador/alumno/alumnoCrud.js (o donde tengas el controlador)
 exports.obtenerAlumno = async (req, res) => {
   try {
-    const alumno = await Alumno.findOne({ matricula: req.params.matricula }).populate('calificaciones.materia');
+    const alumno = await Alumno.findOne({ matricula: req.params.matricula })
+  .populate('calificaciones.materia');
+
+alumno.calificaciones = alumno.calificaciones.filter(c => c.materia); // <--- eliminar nulos
+
     if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
     res.json(alumno);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Actualizar alumno por matrícula
 exports.actualizarAlumno = async (req, res) => {

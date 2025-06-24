@@ -5,8 +5,8 @@ const crud = require('../controlador/materia/materiaCrud');
 // 📦 CRUD básico para Materia
 router.post('/crear-materia', crud.crearMateria);
 router.get('/obtener-materias', crud.obtenerMaterias);
-router.get('/obtener-materia/:id', crud.obtenerMateria);
-router.put('/actualizar-materia/:id', crud.actualizarMateria);
-router.delete('/eliminar-materia/:id', crud.eliminarMateria);
+router.get('/obtener-materia/:clave', crud.obtenerMateria);
+router.put('/actualizar-materia/:clave', crud.actualizarMateria);
+router.delete('/eliminar-materia/:clave', crud.eliminarMateria);
 
 module.exports = router;

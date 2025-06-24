@@ -4,13 +4,10 @@ const router = express.Router();
 const crud = require('../controlador/maestro/maestroCrud');
 const auth = require('../controlador/maestro/authenticarMaestro');
 const materias = require('../controlador/maestro/maestroMateria');
-
 const calificaciones = require('../controlador/maestro/maestroCalificaciones');
 
-router.get(
-  '/calificaciones/:cedula/:claveMateria/:grupo/:unidad',
-  calificaciones.obtenerCalificacionesPorUnidadYGrupo
-);
+// 🔎 Obtener calificaciones de una unidad y final por materia y grupo (solo las del maestro)
+router.get('/calificaciones/:cedula/:claveMateria/:grupo/:unidad',calificaciones.obtenerCalificacionesPorUnidadYGrupo);
 
 
 // 📚 Obtener materias que tiene un maestro
@@ -35,11 +32,12 @@ router.delete('/eliminar-maestro/:cedula', crud.eliminarMaestro);
 // 🔐 Autenticación de maestros
 router.post('/login', auth.autenticarMaestro);
 
-// rutas/maestroRuta.js
+// 📚 Asignar materia a maestro (relación)
 router.post('/asignar-materia', materias.crearRelacion);
 
-router.delete('/eliminar-materia', materias.eliminarRelacion);
-
+//eliminar relación entre maestro y materia
+router.delete('/eliminar-materia', materias.eliminarRelacion); 
+// editar relación entre maestro y materia
 router.put('/editar-relacion', materias.editarRelacion);
 
 

@@ -10,7 +10,7 @@ conectarBD();
 // Middlewares
 app.use(express.json());
 
-app.use(cors);
+app.use(cors());
 
 // Rutas (las puedes ir creando)
 app.use('/api/alumnos', require('./rutas/alumnoRuta'));

@@ -94,16 +94,17 @@ exports.verMateriasDeAlumno = async (req, res) => {
   const { matricula } = req.params;
 
   try {
-    // Buscar alumno y poblar la referencia a materia dentro de calificaciones
-    const alumno = await Alumno.findOne({ matricula }).populate('calificaciones.materia');
+    const alumno = await Alumno.findOne({ matricula })
+      .populate('calificaciones.materia');
+
     if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
 
-    // Enviar las calificaciones, que incluyen la materia con detalles
-    res.json({ materias: alumno.calificaciones });
+    res.json(alumno);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
 // ✅ 5. Ver todos los alumnos de un grupo

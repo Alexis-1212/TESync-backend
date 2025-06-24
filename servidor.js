@@ -1,7 +1,7 @@
 require('dotenv').config({ path: './admin.env' });
 const express = require('express');
 const conectarBD = require('./conexion/db');
-
+const cors = require('cors');
 const app = express();
 
 // Conexión a la base de datos
@@ -9,6 +9,8 @@ conectarBD();
 
 // Middlewares
 app.use(express.json());
+
+app.use(cors);
 
 // Rutas (las puedes ir creando)
 app.use('/api/alumnos', require('./rutas/alumnoRuta'));

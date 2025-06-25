@@ -16,7 +16,7 @@ app.use(cors());
 app.use('/api/alumnos', require('./rutas/alumnoRuta'));
 app.use('/api/materias', require('./rutas/materiaRuta'));
 app.use('/api/maestros', require('./rutas/maestroRuta'));
-
+app.use('/api/usuarios', require('./rutas/alumnoRuta'));
 
 // Puerto
 const PUERTO = process.env.PUERTO || 3000;

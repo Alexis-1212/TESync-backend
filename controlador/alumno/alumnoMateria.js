@@ -108,7 +108,8 @@ exports.verMateriasDeAlumno = async(req, res) => {
     <<
     <<
     <<
-    < HEAD
+    <
+    HEAD
     try {
         const alumno = await Alumno.findOne({ matricula }).populate('materias');
         if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
@@ -194,7 +195,8 @@ exports.verAlumnosPorMateria = async(req, res) => {
         <<
         <<
         <<
-        < HEAD
+        <
+        HEAD
         const alumnos = await Alumno.find({ materias: materia._id }); ===
         ===
         =

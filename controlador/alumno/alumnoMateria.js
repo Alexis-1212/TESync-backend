@@ -1,6 +1,6 @@
 const Alumno = require('../../modelos/alumno');
 const Materia = require('../../modelos/materia');
-
+const MaestroMateria = require('../../modelos/maestroMateria');
 // ✅ 1. Asignar una materia a un alumno (por matrícula)
 exports.agregarMateriaAlumno = async (req, res) => {
   const { matricula, claveMateria } = req.params;
@@ -94,16 +94,49 @@ exports.verMateriasDeAlumno = async (req, res) => {
   const { matricula } = req.params;
 
   try {
+    // Traemos alumno con materias pobladas
     const alumno = await Alumno.findOne({ matricula })
       .populate('calificaciones.materia');
 
-    if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+    if (!alumno) {
+      return res.status(404).json({ error: 'Alumno no encontrado' });
+    }
 
-    res.json(alumno);
+    // Para cada materia, obtener el maestro que la imparte para el grupo del alumno
+    const materiasConProfesor = await Promise.all(
+      alumno.calificaciones.map(async (calif) => {
+        // Buscar MaestroMateria que relacione la materia y grupo
+        const maestroMateria = await MaestroMateria.findOne({
+          materia: calif.materia._id,
+          grupo: alumno.grupo
+        }).populate('maestro');
+
+        return {
+          nombre: calif.materia.nombre,
+          clave: calif.materia.clave,
+          creditos: calif.materia.creditos,
+          unidades: calif.materia.unidades,
+          grupo: alumno.grupo,
+          calificacionFinal: calif.final,
+          unidadesCalificaciones: calif.unidades.map(u => u.calificacion),
+          profesor: maestroMateria ? maestroMateria.maestro.nombre : 'No asignado'
+        };
+      })
+    );
+
+    // Responder con los datos armados
+    res.json({
+      nombre: alumno.nombre,
+      matricula: alumno.matricula,
+      grupo: alumno.grupo,
+      materias: materiasConProfesor
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: 'Error del servidor' });
   }
 };
+
 
 
 

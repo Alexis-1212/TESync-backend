@@ -79,3 +79,14 @@ exports.actualizarEstadoMateria = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Obtener solo los nombres de las materias
+exports.obtenerNombresMaterias = async (req, res) => {
+  try {
+    const materias = await Materia.find({}, 'nombre'); // Solo devuelve el campo 'nombre'
+    res.json(materias);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+

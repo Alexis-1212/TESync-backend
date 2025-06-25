@@ -1,7 +1,7 @@
 require('dotenv').config({ path: './admin.env' });
 const express = require('express');
+const cors = require('cors')
 const conectarBD = require('./conexion/db');
-const cors = require('cors');
 const app = express();
 
 // Conexión a la base de datos
@@ -21,5 +21,5 @@ app.use('/api/usuarios', require('./rutas/alumnoRuta'));
 // Puerto
 const PUERTO = process.env.PUERTO || 3000;
 app.listen(PUERTO, () => {
-  console.log(`🚀 Servidor ejecutándose en el puerto ${PUERTO}`);
+    console.log(`🚀 Servidor ejecutándose en el puerto ${PUERTO}`);
 });

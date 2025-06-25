@@ -24,33 +24,6 @@ exports.agregarMateriaAlumno = async(req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-<<<<<<< HEAD
-=======
-
-    // Asegurar que calificaciones esté definido
-    if (!alumno.calificaciones) alumno.calificaciones = [];
-
-    const yaTiene = alumno.calificaciones.some(
-      c => c.materia.toString() === materia._id.toString()
-    );
-
-    if (yaTiene) {
-      return res.status(400).json({ error: 'La materia ya está asignada al alumno' });
-    }
-
-    alumno.calificaciones.push({
-      materia: materia._id,
-      unidades: [],
-      final: 0,
-    });
-
-    await alumno.save();
-
-    res.json({ mensaje: 'Materia asignada con éxito al alumno', alumno });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
->>>>>>> 6a85e5d34badedd454f0238a2355db6cb08ba4d0
 };
 
 
@@ -108,7 +81,6 @@ exports.asignarMateriaAGrupo = async(req, res) => {
 exports.verMateriasDeAlumno = async(req, res) => {
     const { matricula } = req.params;
 
-<<<<<<< HEAD
     try {
         const alumno = await Alumno.findOne({ matricula }).populate('materias');
         if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
@@ -117,50 +89,6 @@ exports.verMateriasDeAlumno = async(req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-=======
-  try {
-    // Traemos alumno con materias pobladas
-    const alumno = await Alumno.findOne({ matricula })
-      .populate('calificaciones.materia');
-
-    if (!alumno) {
-      return res.status(404).json({ error: 'Alumno no encontrado' });
-    }
-
-    // Para cada materia, obtener el maestro que la imparte para el grupo del alumno
-    const materiasConProfesor = await Promise.all(
-      alumno.calificaciones.map(async (calif) => {
-        // Buscar MaestroMateria que relacione la materia y grupo
-        const maestroMateria = await MaestroMateria.findOne({
-          materia: calif.materia._id,
-          grupo: alumno.grupo
-        }).populate('maestro');
-
-        return {
-          nombre: calif.materia.nombre,
-          clave: calif.materia.clave,
-          creditos: calif.materia.creditos,
-          unidades: calif.materia.unidades,
-          grupo: alumno.grupo,
-          calificacionFinal: calif.final,
-          unidadesCalificaciones: calif.unidades.map(u => u.calificacion),
-          profesor: maestroMateria ? maestroMateria.maestro.nombre : 'No asignado'
-        };
-      })
-    );
-
-    // Responder con los datos armados
-    res.json({
-      nombre: alumno.nombre,
-      matricula: alumno.matricula,
-      grupo: alumno.grupo,
-      materias: materiasConProfesor
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error del servidor' });
-  }
->>>>>>> 6a85e5d34badedd454f0238a2355db6cb08ba4d0
 };
 
 
@@ -188,12 +116,7 @@ exports.verAlumnosPorMateria = async(req, res) => {
         const materia = await Materia.findOne({ clave: claveMateria });
         if (!materia) return res.status(404).json({ error: 'Materia no encontrada' });
 
-<<<<<<< HEAD
         const alumnos = await Alumno.find({ materias: materia._id });
-=======
-    // Buscar alumnos que tengan la materia en su arreglo calificaciones
-    const alumnos = await Alumno.find({ 'calificaciones.materia': materia._id });
->>>>>>> 6a85e5d34badedd454f0238a2355db6cb08ba4d0
 
         res.json({ claveMateria, alumnos });
     } catch (error) {

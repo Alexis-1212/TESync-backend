@@ -7,7 +7,7 @@ const materias = require('../controlador/maestro/maestroMateria');
 const calificaciones = require('../controlador/maestro/maestroCalificaciones');
 
 // 🔎 Obtener calificaciones de una unidad y final por materia y grupo (solo las del maestro)
-router.get('/calificaciones/:cedula/:claveMateria/:grupo/:unidad',calificaciones.obtenerCalificacionesPorUnidadYGrupo);
+router.get('/calificaciones/:cedula/:claveMateria/:grupo/:unidad', calificaciones.obtenerCalificacionesPorUnidadYGrupo);
 
 // 👀 Ver todas las relaciones maestro-materia-grupo
 router.get('/relaciones', materias.verRelaciones);
@@ -32,7 +32,7 @@ router.post('/login', auth.autenticarMaestro);
 router.post('/asignar-materia', materias.crearRelacion);
 
 //eliminar relación entre maestro y materia
-router.delete('/eliminar-materia', materias.eliminarRelacion); 
+router.delete('/eliminar-materia', materias.eliminarRelacion);
 // editar relación entre maestro y materia
 router.put('/editar-relacion', materias.editarRelacion);
 

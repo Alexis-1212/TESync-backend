@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "servidor.js",
   "scripts": {
+    "start": "nodemon servidor.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon servidor.js"
   },

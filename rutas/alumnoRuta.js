@@ -17,7 +17,7 @@ router.patch('/actualizar-grupo-alumno/:matricula', crud.actualizarGrupoAlumno);
 
 // Calificaciones por materia (registro, edición, eliminación, consulta)
 router.post('/:matricula/calificaciones/:clave', calificaciones.agregarCalificacionMateria); // Agregar calificación
-router.put('/:matricula/calificaciones/:clave', calificaciones.editarCalificacionMateria);   // Editar calificación
+router.put('/:matricula/calificaciones/:clave', calificaciones.editarCalificacionMateria); // Editar calificación
 router.delete('/:matricula/calificaciones/:clave', calificaciones.eliminarCalificacionMateria); // Eliminar calificación
 
 // Consulta
@@ -44,5 +44,7 @@ router.get('/grupo/:grupo/alumnos', materias.verAlumnosPorGrupo);
 
 // Ver alumnos inscritos en una materia
 router.get('/materia/:claveMateria/alumnos', materias.verAlumnosPorMateria);
+
+
 
 module.exports = router;

@@ -57,3 +57,25 @@ exports.eliminarMateria = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.actualizarEstadoMateria = async (req, res) => {
+  const { clave } = req.params;
+  const { estado } = req.body;
+
+  try {
+    const materia = await Materia.findOneAndUpdate(
+      { clave },
+      { estado },
+      { new: true } // devuelve la materia actualizada
+    );
+
+    if (!materia) {
+      return res.status(404).json({ error: 'Materia no encontrada' });
+    }
+
+    res.json({ mensaje: 'Estado actualizado correctamente', materia });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

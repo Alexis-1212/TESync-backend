@@ -138,8 +138,6 @@ exports.verMateriasDeAlumno = async (req, res) => {
 };
 
 
-
-
 // ✅ 5. Ver todos los alumnos de un grupo
 exports.verAlumnosPorGrupo = async (req, res) => {
   const { grupo } = req.params;

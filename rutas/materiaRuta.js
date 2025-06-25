@@ -8,5 +8,6 @@ router.get('/obtener-materias', crud.obtenerMaterias);
 router.get('/obtener-materia/:clave', crud.obtenerMateria);
 router.put('/actualizar-materia/:clave', crud.actualizarMateria);
 router.delete('/eliminar-materia/:clave', crud.eliminarMateria);
+router.patch('/actualizar-estado/:clave', crud.actualizarEstadoMateria);
 
 module.exports = router;

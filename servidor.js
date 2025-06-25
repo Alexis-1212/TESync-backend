@@ -2,7 +2,6 @@ require('dotenv').config({ path: './admin.env' });
 const express = require('express');
 const cors = require('cors')
 const conectarBD = require('./conexion/db');
-const cors = require('cors');
 const app = express();
 
 // Conexión a la base de datos
@@ -10,9 +9,6 @@ conectarBD();
 
 // Middlewares
 app.use(express.json());
-
-app.use(cors());
-
 
 app.use(cors());
 

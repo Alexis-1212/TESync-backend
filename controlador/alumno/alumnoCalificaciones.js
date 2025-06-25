@@ -4,15 +4,17 @@ const Materia = require('../../modelos/materia');
 
 // ✅ Agregar calificaciones de una materia para un alumno
 exports.agregarCalificacionMateria = async (req, res) => {
-  const { matricula } = req.params;
-  const { materiaId, unidades, final } = req.body;
+  const { matricula, clave } = req.params;
+  const { unidades, final } = req.body;
 
   try {
     const alumno = await Alumno.findOne({ matricula });
     if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
 
-    const materia = await Materia.findById(materiaId);
-    if (!materia) return res.status(404).json({ error: 'Materia no encontrada' });
+    const materia = await Materia.findOne({ clave });
+    if (!materia) return res.status(404).json({ error: 'Materia no encontrada por clave' });
+
+    const materiaId = materia._id;
 
     // Verificar si ya existe calificación para esa materia
     const yaExiste = alumno.calificaciones.some(calif => calif.materia.equals(materiaId));
@@ -40,14 +42,19 @@ exports.agregarCalificacionMateria = async (req, res) => {
   }
 };
 
-// ✅ Editar una calificación existente (unidades y final)
+
 exports.editarCalificacionMateria = async (req, res) => {
-  const { matricula, materiaId } = req.params;
+  const { matricula, clave } = req.params;
   const { unidades, final } = req.body;
 
   try {
     const alumno = await Alumno.findOne({ matricula });
     if (!alumno) return res.status(404).json({ error: 'Alumno no encontrado' });
+
+    const materia = await Materia.findOne({ clave });
+    if (!materia) return res.status(404).json({ error: 'Materia no encontrada por clave' });
+
+    const materiaId = materia._id;
 
     const calificacion = alumno.calificaciones.find(calif => calif.materia.equals(materiaId));
     if (!calificacion) return res.status(404).json({ error: 'Calificación no encontrada para esa materia' });
@@ -61,6 +68,7 @@ exports.editarCalificacionMateria = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // ✅ Eliminar calificación de una materia
 exports.eliminarCalificacionMateria = async (req, res) => {
